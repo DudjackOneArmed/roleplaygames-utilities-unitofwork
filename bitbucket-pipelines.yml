@@ -1,0 +1,98 @@
+#  Template .NET Core build
+
+#  This template allows you to validate your .NET Core package.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: mcr.microsoft.com/dotnet/sdk:6.0
+
+pipelines:
+  default:
+      - step:
+          name: Build and test Database.UnitOfWork.Contracts library 
+          script:
+            - export PROJECT_NAME="Database.UnitOfWork.Contracts"
+            - export PROJECT_PATH="${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+            - dotnet restore ${PROJECT_PATH}
+            - dotnet build ${PROJECT_PATH} --no-restore --configuration Release
+            - dotnet test ${PROJECT_PATH} --no-build --configuration Release
+          condition:
+            changesets:
+              includePaths:
+                # any changes in deeply nested directories under Database.UnitOfWork.Contracts
+                - "Database.UnitOfWork.Contracts/**"
+      - step:
+          name: Build and test Database.UnitOfWork.EF library 
+          script:
+            - export PROJECT_NAME="Database.UnitOfWork.EF"
+            - export PROJECT_PATH="${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+            - dotnet restore ${PROJECT_PATH}
+            - dotnet build ${PROJECT_PATH} --no-restore --configuration Release
+            - dotnet test ${PROJECT_PATH} --no-build --configuration Release
+          condition:
+            changesets:
+              includePaths:
+                # any changes in deeply nested directories under Database.UnitOfWork.EF
+                - "Database.UnitOfWork.EF/**"
+      - step:
+          name: Build and test Database.UnitOfWork.EF.DI library 
+          script:
+            - export PROJECT_NAME="Database.UnitOfWork.EF.DI"
+            - export PROJECT_PATH="${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+            - dotnet restore ${PROJECT_PATH}
+            - dotnet build ${PROJECT_PATH} --no-restore --configuration Release
+            - dotnet test ${PROJECT_PATH} --no-build --configuration Release
+          condition:
+            changesets:
+              includePaths:
+                # any changes in deeply nested directories under Database.UnitOfWork.EF.DI
+                - "Database.UnitOfWork.EF.DI/**"
+  branches:
+    master:
+      - step:
+          name: Push to nuget repository Database.UnitOfWork.Contracts library
+          script:
+            - export PROJECT_NAME="Database.UnitOfWork.Contracts"
+            - export PROJECT_PATH="${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+            - export RELEASES_DIR="./releases"
+            - dotnet build ${PROJECT_PATH} --configuration Release
+            # create nuget package
+            - dotnet pack ${PROJECT_PATH} --output ${RELEASES_DIR} --configuration Release
+            # publish package to roleplaygames.jfrog.io
+            - dotnet nuget push ${RELEASES_DIR}/*.nupkg --api-key ${USERNAME}:${PASSWORD} --source https://roleplaygames.jfrog.io/artifactory/api/nuget/v3/common-nuget
+          condition:
+            changesets:
+              includePaths:
+                # any changes in deeply nested directories under StaticClassesProxies.System
+                - "Database.UnitOfWork.Contracts/**"
+      - step:
+          name: Push to nuget repository Database.UnitOfWork.EF library
+          script:
+            - export PROJECT_NAME="Database.UnitOfWork.EF"
+            - export PROJECT_PATH="${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+            - export RELEASES_DIR="./releases"
+            - dotnet build ${PROJECT_PATH} --configuration Release
+            # create nuget package
+            - dotnet pack ${PROJECT_PATH} --output ${RELEASES_DIR} --configuration Release
+            # publish package to roleplaygames.jfrog.io
+            - dotnet nuget push ${RELEASES_DIR}/*.nupkg --api-key ${USERNAME}:${PASSWORD} --source https://roleplaygames.jfrog.io/artifactory/api/nuget/v3/common-nuget
+          condition:
+            changesets:
+              includePaths:
+                # any changes in deeply nested directories under Database.UnitOfWork.EF
+                - "Database.UnitOfWork.EF/**"
+      - step:
+          name: Push to nuget repository Database.UnitOfWork.EF.DI library
+          script:
+            - export PROJECT_NAME="Database.UnitOfWork.EF.DI"
+            - export PROJECT_PATH="${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+            - export RELEASES_DIR="./releases"
+            - dotnet build ${PROJECT_PATH} --configuration Release
+            # create nuget package
+            - dotnet pack ${PROJECT_PATH} --output ${RELEASES_DIR} --configuration Release
+            # publish package to roleplaygames.jfrog.io
+            - dotnet nuget push ${RELEASES_DIR}/*.nupkg --api-key ${USERNAME}:${PASSWORD} --source https://roleplaygames.jfrog.io/artifactory/api/nuget/v3/common-nuget
+          condition:
+            changesets:
+              includePaths:
+                # any changes in deeply nested directories under Database.UnitOfWork.EF.DI
+                - "Database.UnitOfWork.EF.DI/**"
