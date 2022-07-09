@@ -1,5 +1,6 @@
 ﻿using Database.UnitOfWork.Contracts.Entities;
 using Database.UnitOfWork.Contracts.Services;
+using Database.UnitOfWork.EF.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -25,23 +26,27 @@ namespace Database.UnitOfWork.EF.Services
         /// <inheritdoc/>
         public IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : EntityBase
         {
-            var repos = (from property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            var repositories = (from property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
                          let generics = property.PropertyType.GetGenericArguments()
                          where generics.Length == 1 && generics.First() == typeof(TEntity)
-                         select property.GetValue(this));
+                         select property.GetValue(this)).OfType<IReadOnlyRepository<TEntity>>().ToList();
 
-            return repos.OfType<IReadOnlyRepository<TEntity>>().SingleOrDefault() ?? new ReadOnlyRepository<TEntity>(Context);
+            return repositories.Any()
+                ? repositories.Count == 1 ? repositories.First() : throw new MoreThanOneRepositoriesUnitOfWorkException($"More than one readonly ripository registered in Unit of work {GetType()}")
+                : new ReadOnlyRepository<TEntity>(Context);
         }
 
         /// <inheritdoc/>
         public IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
         {
-            var repos = (from property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            var repositories = (from property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
                          let generics = property.PropertyType.GetGenericArguments()
                          where generics.Length == 1 && generics.First() == typeof(TEntity)
-                         select property.GetValue(this));
+                         select property.GetValue(this)).OfType<IRepository<TEntity>>().ToList();
 
-            return repos.OfType<IRepository<TEntity>>().SingleOrDefault() ?? new Repository<TEntity>(Context);
+            return repositories.Any()
+                ? repositories.Count == 1 ? repositories.First() : throw new MoreThanOneRepositoriesUnitOfWorkException($"More than one ripository registered in Unit of work {GetType()}")
+                : new Repository<TEntity>(Context);
         }
 
         /// <inheritdoc/>
