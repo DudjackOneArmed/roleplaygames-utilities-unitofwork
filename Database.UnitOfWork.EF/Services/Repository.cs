@@ -17,12 +17,18 @@ namespace Database.UnitOfWork.EF.Services
         /// <inheritdoc/>
         public virtual void Add(TEntity item)
         {
+            if (item is null) 
+                throw new ArgumentNullException(nameof(item));
+
             Context.Set<TEntity>().Add(item);
         }
 
         /// <inheritdoc/>
         public virtual void Delete(TEntity item)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
             var set = Context.Set<TEntity>();
 
             if (Context.Entry(item).State == EntityState.Detached)
@@ -40,6 +46,9 @@ namespace Database.UnitOfWork.EF.Services
         /// <inheritdoc/>
         public virtual void Update(TEntity item)
         {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+
             Context.Set<TEntity>().Attach(item);
             Context.Entry(item).State = EntityState.Modified;
         }
