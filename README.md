@@ -22,3 +22,19 @@ Readonly repositories return item as no tracking.
 Extensions to register Unit of work services. Support next IoC:
  - Autofac
  - Microsoft.DependencyInjection (need to register repositories for each entity type)
+
+ #### Microsoft injection
+
+ To register services with microsoft injection call next methods on your IServiceCollection instance:
+ ```
+ using Microsoft.DependencyInjection;
+
+ // ...
+
+	serviceCollaction.AddUnitOfWork();
+	serviceCollaction.AddRepository<TEntity1Type>();
+	serviceCollaction.AddRepository<TEntity2Type>();
+	// And next for all repositories types call AddRepository method
+
+ // ...
+ ```

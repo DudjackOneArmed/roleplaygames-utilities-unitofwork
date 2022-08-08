@@ -28,7 +28,7 @@ namespace Microsoft.DependencyInjection
         /// Add repositories for entity type from unit of work
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
-        public static IServiceCollection AddRepositories<TEntity>(this IServiceCollection serviceCollection) where TEntity : EntityBase
+        public static IServiceCollection AddRepository<TEntity>(this IServiceCollection serviceCollection) where TEntity : EntityBase
         {
             return serviceCollection
                 .AddScoped(x => x.GetService<IUnitOfWork>()!.GetReadOnlyRepository<TEntity>())
