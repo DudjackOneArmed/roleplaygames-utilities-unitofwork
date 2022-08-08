@@ -46,7 +46,7 @@ namespace Database.UnitOfWork.EF.DI.Autofac
                 var unitOfWork = context.Resolve<IUnitOfWork>();
                 var method = unitOfWork.GetType().GetMethod("GetReadOnlyRepository")?.MakeGenericMethod(type);
 
-                return method?.Invoke(null, null) ?? throw new InvalidOperationException($"Unit of work cannot get read only repository for {type}.");
+                return method?.Invoke(unitOfWork, null) ?? throw new InvalidOperationException($"Unit of work cannot get read only repository for {type}.");
             }).As(typeof(IReadOnlyRepository<>)).InstancePerRequest();
 
             containerBuilder.RegisterGeneric((context, types, parameters) =>
@@ -58,7 +58,7 @@ namespace Database.UnitOfWork.EF.DI.Autofac
                 var unitOfWork = context.Resolve<IUnitOfWork>();
                 var method = unitOfWork.GetType().GetMethod("GetRepository")?.MakeGenericMethod(type);
 
-                return method?.Invoke(null, null) ?? throw new InvalidOperationException($"Unit of work cannot get repository for {type}.");
+                return method?.Invoke(unitOfWork, null) ?? throw new InvalidOperationException($"Unit of work cannot get repository for {type}.");
             }).As(typeof(IRepository<>)).InstancePerRequest();
 
             return containerBuilder;
