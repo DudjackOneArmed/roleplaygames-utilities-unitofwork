@@ -1,12 +1,13 @@
 ﻿using Autofac;
 using Database.UnitOfWork.Contracts.Services;
+using Database.UnitOfWork.EF.Services;
 
 namespace Database.UnitOfWork.EF.DI.Autofac
 {
     public static class ContainerBuilderExtensions
     {
         /// <summary>
-        /// Register services for unit of work
+        /// Registers services for unit of work
         /// </summary>
         public static ContainerBuilder RegisterUnitOfWorkServices(this ContainerBuilder containerBuilder)
         {
@@ -15,11 +16,13 @@ namespace Database.UnitOfWork.EF.DI.Autofac
                 .As<IUnitOfWork>()
                 .InstancePerRequest();
 
-            return containerBuilder.RegisterRepositories();
+            return containerBuilder
+                .RegisterRepositories()
+                .RegisterServices();
         }
 
         /// <summary>
-        /// Register services for custom unit of work
+        /// Registers services for custom unit of work
         /// </summary>
         /// <typeparam name="TUnitOfWork">Custom unit of work type</typeparam>
         public static ContainerBuilder RegisterUnitOfWorkServices<TUnitOfWork>(this ContainerBuilder containerBuilder) where TUnitOfWork : Services.UnitOfWork
@@ -29,11 +32,13 @@ namespace Database.UnitOfWork.EF.DI.Autofac
                 .As<IUnitOfWork>()
                 .InstancePerRequest();
 
-            return containerBuilder.RegisterRepositories();
+            return containerBuilder
+                .RegisterRepositories()
+                .RegisterServices();
         }
 
         /// <summary>
-        /// Register repositories from unit of work
+        /// Registers repositories from unit of work
         /// </summary>
         private static ContainerBuilder RegisterRepositories(this ContainerBuilder containerBuilder)
         {
@@ -60,6 +65,18 @@ namespace Database.UnitOfWork.EF.DI.Autofac
 
                 return method?.Invoke(unitOfWork, null) ?? throw new InvalidOperationException($"Unit of work cannot get repository for {type}.");
             }).As(typeof(IRepository<>)).InstancePerRequest();
+
+            return containerBuilder;
+        }
+
+        /// <summary>
+        /// Registers utils services
+        /// </summary>
+        private static ContainerBuilder RegisterServices(this ContainerBuilder containerBuilder)
+        {
+            containerBuilder
+                .RegisterType<QueryableAsyncExecutor>()
+                .As<IQueryableAsyncExecutor>();
 
             return containerBuilder;
         }

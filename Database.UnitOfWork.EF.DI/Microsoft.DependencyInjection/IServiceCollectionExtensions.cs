@@ -8,24 +8,29 @@ namespace Microsoft.DependencyInjection
     public static class IServiceCollectionExtensions
     {
         /// <summary>
-        /// Add unit of work
+        /// Adds unit of work
         /// </summary>
         public static IServiceCollection AddUnitOfWork(this IServiceCollection serviceCollection)
         {
-            return serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
+            return serviceCollection
+                .AddScoped<IUnitOfWork, UnitOfWork>()
+                .AddTransient<IQueryableAsyncExecutor, QueryableAsyncExecutor>();
         }
 
         /// <summary>
-        /// Add custom unit of work
+        /// Adds custom unit of work
         /// </summary>
         /// <typeparam name="TUnitOfWork">Custom unit of work type</typeparam>
         public static IServiceCollection AddUnitOfWork<TUnitOfWork>(this IServiceCollection serviceCollection) where TUnitOfWork : UnitOfWork
         {
-            return serviceCollection.AddScoped<IUnitOfWork, TUnitOfWork>();
+            return serviceCollection
+                .AddScoped<IUnitOfWork, TUnitOfWork>()
+                .AddTransient<IQueryableAsyncExecutor, QueryableAsyncExecutor>();
+            ;
         }
 
         /// <summary>
-        /// Add repositories for entity type from unit of work
+        /// Adds repositories for entity type from unit of work
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         public static IServiceCollection AddRepository<TEntity>(this IServiceCollection serviceCollection) where TEntity : EntityBase
