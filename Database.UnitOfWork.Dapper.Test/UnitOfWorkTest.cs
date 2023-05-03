@@ -1,6 +1,5 @@
 ﻿using Database.UnitOfWork.Contracts.Entities;
 using Database.UnitOfWork.Contracts.Services;
-using Database.UnitOfWork.Dapper.Exceptions;
 using Moq;
 using System.Data;
 
@@ -83,8 +82,11 @@ namespace Database.UnitOfWork.Dapper.Test
         [Fact]
         public void GetReadOnlyRepository_UnitOfWorkContainsRepositoryAndReadOnlyRepository_ThrowsMoreThanOneRepositoriesUnitOfWorkException()
         {
-            // Arrange & Act & Assert
-            Assert.ThatCode(_unitOfWorkWithRepositoryAndReadonlyRepository.GetReadOnlyRepository<EntityBase>).Throws<MoreThanOneRepositoriesUnitOfWorkException>();
+            // Arrange & Act
+            var result = _unitOfWorkWithRepositoryAndReadonlyRepository.GetReadOnlyRepository<EntityBase>();
+
+            // Assert
+            Assert.That(result).IsSame(_readOnlyRepositoryMock.Object);
         }
     }
 }
