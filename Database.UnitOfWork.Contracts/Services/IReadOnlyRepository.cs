@@ -6,7 +6,7 @@ namespace Database.UnitOfWork.Contracts.Services
     /// Repository for reading data
     /// </summary>
     /// <typeparam name="TEntity">Database entity type</typeparam>
-    public interface IReadOnlyRepository<TEntity> where TEntity : EntityBase
+    public interface IReadOnlyRepository<TEntity> : IRepository where TEntity : EntityBase
     {
         /// <summary>
         /// Read all entities

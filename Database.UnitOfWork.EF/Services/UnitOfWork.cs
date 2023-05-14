@@ -1,13 +1,10 @@
-﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
-using Database.UnitOfWork.EF.Exceptions;
+﻿using Database.UnitOfWork.Contracts.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace Database.UnitOfWork.EF.Services
 {
     /// <inheritdoc/>
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : UnitOfWorkBase
     {
         private bool _isDisposed = false;
 
@@ -18,39 +15,8 @@ namespace Database.UnitOfWork.EF.Services
             Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        ~UnitOfWork()
-        {
-            Dispose(false);
-        }
-
         /// <inheritdoc/>
-        public IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : EntityBase
-        {
-            var repositories = (from property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                         let generics = property.PropertyType.GetGenericArguments()
-                         where generics.Length == 1 && generics.First() == typeof(TEntity)
-                         select property.GetValue(this)).OfType<IReadOnlyRepository<TEntity>>().ToList();
-
-            return repositories.Any()
-                ? repositories.Count == 1 ? repositories.First() : throw new MoreThanOneRepositoriesUnitOfWorkException($"More than one readonly ripository registered in Unit of work {GetType()}")
-                : new ReadOnlyRepository<TEntity>(Context);
-        }
-
-        /// <inheritdoc/>
-        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
-        {
-            var repositories = (from property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                         let generics = property.PropertyType.GetGenericArguments()
-                         where generics.Length == 1 && generics.First() == typeof(TEntity)
-                         select property.GetValue(this)).OfType<IRepository<TEntity>>().ToList();
-
-            return repositories.Any()
-                ? repositories.Count == 1 ? repositories.First() : throw new MoreThanOneRepositoriesUnitOfWorkException($"More than one ripository registered in Unit of work {GetType()}")
-                : new Repository<TEntity>(Context);
-        }
-
-        /// <inheritdoc/>
-        public void RejectAllChanges()
+        public override void RejectAllChanges()
         {
             foreach (var entry in Context.ChangeTracker.Entries())
             {
@@ -69,7 +35,7 @@ namespace Database.UnitOfWork.EF.Services
         }
 
         /// <inheritdoc/>
-        public void RejectChanges<TEntity>() where TEntity : EntityBase
+        public override void RejectChanges<TEntity>()
         {
             foreach (var entry in Context.ChangeTracker.Entries<TEntity>())
             {
@@ -88,7 +54,7 @@ namespace Database.UnitOfWork.EF.Services
         }
 
         /// <inheritdoc/>
-        public void SaveChanges()
+        public override void SaveChanges()
         {
             using var transaction = Context.Database.BeginTransaction();
 
@@ -106,9 +72,9 @@ namespace Database.UnitOfWork.EF.Services
         }
 
         /// <inheritdoc/>
-        public async Task SaveChangesAsync()
+        public override async Task SaveChangesAsync()
         {
-            using var transaction = await Context.Database.BeginTransactionAsync();
+            await using var transaction = await Context.Database.BeginTransactionAsync();
 
             try
             {
@@ -124,35 +90,32 @@ namespace Database.UnitOfWork.EF.Services
         }
 
         /// <inheritdoc/>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Protected implementation of Dispose pattern
-        /// </summary>
-        /// <param name="isDisposing">Is dispose is used</param>
-        protected virtual void Dispose(bool isDisposing)
+        public override void Dispose()
         {
             if (!_isDisposed)
             {
-                if (isDisposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
                 Context.Dispose();
 
                 _isDisposed = true;
+
+                GC.SuppressFinalize(this);
             }
         }
 
+        /// <inheritdoc/>
+        protected override IReadOnlyRepository<TEntity> CreateReadOnlyRepository<TEntity>() => new ReadOnlyRepository<TEntity>(Context);
+
+        /// <inheritdoc/>
+        protected override IRepository<TEntity> CreateRepository<TEntity>() => new Repository<TEntity>(Context);
+
+        /// <summary>
+        /// Saves changes, override it to implement additional work with files etc
+        /// </summary>
         protected virtual void SaveChangesInternal() => Context.SaveChanges();
 
+        /// <summary>
+        /// Save changes async, override it to implement additional work with files etc
+        /// </summary>
         protected virtual async Task SaveChangesAsyncInternal() => await Context.SaveChangesAsync().ConfigureAwait(false);
     }
 }

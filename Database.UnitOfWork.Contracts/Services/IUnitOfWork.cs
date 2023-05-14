@@ -22,6 +22,13 @@ namespace Database.UnitOfWork.Contracts.Services
         IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase;
 
         /// <summary>
+        /// Gets custom repository from fields
+        /// </summary>
+        /// <typeparam name="TRepository">Repository type</typeparam>
+        /// <returns>Repository filed</returns>
+        TRepository GetCustomRepository<TRepository>() where TRepository : class, IRepository;
+
+        /// <summary>
         /// Save all models changes to DB
         /// </summary>
         void SaveChanges();

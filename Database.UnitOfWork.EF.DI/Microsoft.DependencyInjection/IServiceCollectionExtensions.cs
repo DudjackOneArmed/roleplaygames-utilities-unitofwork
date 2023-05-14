@@ -39,5 +39,15 @@ namespace Microsoft.DependencyInjection
                 .AddScoped(x => x.GetService<IUnitOfWork>()!.GetReadOnlyRepository<TEntity>())
                 .AddScoped(x => x.GetService<IUnitOfWork>()!.GetRepository<TEntity>());
         }
+
+        /// <summary>
+        /// Adds custom repositories from unit of work
+        /// </summary>
+        /// <typeparam name="TRepository">Repository type</typeparam>
+        public static IServiceCollection AddCustomRepository<TRepository>(this IServiceCollection serviceCollection) where TRepository : class, IRepository
+        {
+            return serviceCollection
+                .AddScoped(x => x.GetService<IUnitOfWork>()!.GetCustomRepository<TRepository>());
+        }
     }
 }

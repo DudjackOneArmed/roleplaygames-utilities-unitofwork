@@ -3,10 +3,17 @@
 namespace Database.UnitOfWork.Contracts.Services
 {
     /// <summary>
+    /// Base repositories interface
+    /// </summary>
+    public interface IRepository
+    {
+    }
+
+    /// <summary>
     /// Repository for read and edit data
     /// </summary>
     /// <typeparam name="TEntity">Database entity type</typeparam>
-    public interface IRepository<TEntity> where TEntity : EntityBase
+    public interface IRepository<TEntity> : IRepository where TEntity : EntityBase
     {
         /// <summary>
         /// Reads all entities
@@ -21,7 +28,7 @@ namespace Database.UnitOfWork.Contracts.Services
         void Add(TEntity item);
 
         /// <summary>
-        /// Updades modified entity
+        /// Updates modified entity
         /// </summary>
         /// <param name="item">Item to update</param>
         void Update(TEntity item);
