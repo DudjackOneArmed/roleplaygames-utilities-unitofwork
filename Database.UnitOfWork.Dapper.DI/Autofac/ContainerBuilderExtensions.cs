@@ -29,7 +29,28 @@ namespace Database.UnitOfWork.Dapper.DI.Autofac
                 .As<IUnitOfWork>()
                 .InstancePerRequest();
 
-            return containerBuilder.RegisterRepositories();
+            return containerBuilder
+                .RegisterRepositories();
+        }
+
+        /// <summary>
+        /// Registers custom repository from unit of work
+        /// </summary>
+        public static ContainerBuilder RegisterCustomRepository<TRepository>(this ContainerBuilder containerBuilder) where TRepository : class, IRepository
+        {
+            containerBuilder.RegisterGeneric((context, types, parameters) =>
+            {
+                if (types.Length != 1)
+                    throw new InvalidOperationException($"Cannot get custom repository for not single generic type (count = {types.Length}).");
+
+                var type = types.First();
+                var unitOfWork = context.Resolve<IUnitOfWork>();
+                var method = unitOfWork.GetType().GetMethod("GetCustomRepository")?.MakeGenericMethod(type);
+
+                return method?.Invoke(unitOfWork, null) ?? throw new InvalidOperationException($"Unit of work cannot get custom repository for {type}.");
+            }).As(typeof(TRepository)).InstancePerRequest();
+
+            return containerBuilder;
         }
 
         /// <summary>

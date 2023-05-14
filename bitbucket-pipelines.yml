@@ -8,6 +8,19 @@ image: mcr.microsoft.com/dotnet/sdk:6.0
 pipelines:
   default:
       - step:
+          name: Build and test Database.UnitOfWork library 
+          script:
+            - export PROJECT_NAME="Database.UnitOfWork"
+            - export PROJECT_PATH="${PROJECT_NAME}/${PROJECT_NAME}.csproj"
+            - dotnet restore ${PROJECT_PATH}
+            - dotnet build ${PROJECT_PATH} --no-restore --configuration Release
+            - dotnet test ${PROJECT_PATH} --no-build --configuration Release
+          condition:
+            changesets:
+              includePaths:
+                # any changes in deeply nested directories under Database.UnitOfWork
+                - "Database.UnitOfWork/**"
+      - step:
           name: Build and test Database.UnitOfWork.Contracts library 
           script:
             - export PROJECT_NAME="Database.UnitOfWork.Contracts"
