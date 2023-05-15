@@ -1,6 +1,6 @@
 ﻿using Database.UnitOfWork.Contracts.Entities;
 
-namespace Database.UnitOfWork.Contracts.Services
+namespace Database.UnitOfWork.Contracts
 {
     /// <summary>
     /// Base repositories interface

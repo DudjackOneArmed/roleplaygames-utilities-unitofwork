@@ -1,6 +1,6 @@
-﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
-using Database.UnitOfWork.EF.Services;
+﻿using Database.UnitOfWork.Contracts;
+using Database.UnitOfWork.Contracts.Entities;
+using Database.UnitOfWork.EF;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.DependencyInjection

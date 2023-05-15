@@ -1,6 +1,6 @@
-﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
-using Database.UnitOfWork.Dapper.Services;
+﻿using Database.UnitOfWork.Contracts;
+using Database.UnitOfWork.Contracts.Entities;
+using Database.UnitOfWork.Dapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.DependencyInjection

@@ -1,6 +1,6 @@
-﻿using Database.UnitOfWork.Contracts.Services;
+﻿using Database.UnitOfWork.Contracts;
 
-namespace Database.UnitOfWork.Dapper.Services
+namespace Database.UnitOfWork.Dapper
 {
     /// <inheritdoc/>
     public class UnitOfWork : UnitOfWorkBase
@@ -34,7 +34,7 @@ namespace Database.UnitOfWork.Dapper.Services
                 GC.SuppressFinalize(this);
             }
         }
-        
+
         /// <inheritdoc/>
         public override void SaveChanges()
         {

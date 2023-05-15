@@ -1,9 +1,9 @@
 ﻿using Dapper.Contrib.Extensions;
+using Database.UnitOfWork.Contracts;
 using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
 using System.Data;
 
-namespace Database.UnitOfWork.Dapper.Services
+namespace Database.UnitOfWork.Dapper
 {
     /// <inheritdoc/>
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase

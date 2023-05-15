@@ -1,7 +1,7 @@
 ﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
 using System.Reflection;
 using Database.UnitOfWork.Contracts.Exceptions;
+using Database.UnitOfWork.Contracts;
 
 namespace Database.UnitOfWork
 {

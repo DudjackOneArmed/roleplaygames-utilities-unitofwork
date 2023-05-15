@@ -1,5 +1,5 @@
-﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
+﻿using Database.UnitOfWork.Contracts;
+using Database.UnitOfWork.Contracts.Entities;
 using Moq;
 using System.Data;
 
@@ -7,7 +7,7 @@ namespace Database.UnitOfWork.Dapper.Test
 {
     public class UnitOfWorkTest
     {
-        private class UnitOfWorkWithReadonlyRepository : Services.UnitOfWork
+        private class UnitOfWorkWithReadonlyRepository : UnitOfWork
         {
             public IReadOnlyRepository<EntityBase> ReadOnlyRepository { get; }
 
@@ -20,7 +20,7 @@ namespace Database.UnitOfWork.Dapper.Test
             }
         }
 
-        private class UnitOfWorkWithRepository : Services.UnitOfWork
+        private class UnitOfWorkWithRepository : UnitOfWork
         {
             public IRepository<EntityBase> Repository { get; }
 
@@ -33,7 +33,7 @@ namespace Database.UnitOfWork.Dapper.Test
             }
         }
 
-        private class UnitOfWorkWithRepositoryAndReadonlyRepository : Services.UnitOfWork
+        private class UnitOfWorkWithRepositoryAndReadonlyRepository : UnitOfWork
         {
             public IReadOnlyRepository<EntityBase> ReadOnlyRepository { get; }
 

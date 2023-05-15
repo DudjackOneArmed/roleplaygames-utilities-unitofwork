@@ -1,6 +1,6 @@
 ﻿using Moq;
 using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
+using Database.UnitOfWork.Contracts;
 
 namespace Database.UnitOfWork.Test
 {

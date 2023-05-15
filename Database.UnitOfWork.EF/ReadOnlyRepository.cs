@@ -1,8 +1,8 @@
-﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
+﻿using Database.UnitOfWork.Contracts;
+using Database.UnitOfWork.Contracts.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Database.UnitOfWork.EF.Services
+namespace Database.UnitOfWork.EF
 {
     /// <inheritdoc/>
     public class ReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntity> where TEntity : EntityBase

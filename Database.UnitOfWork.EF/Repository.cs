@@ -1,8 +1,8 @@
-﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
+﻿using Database.UnitOfWork.Contracts;
+using Database.UnitOfWork.Contracts.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Database.UnitOfWork.EF.Services
+namespace Database.UnitOfWork.EF
 {
     /// <inheritdoc/>
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
@@ -17,7 +17,7 @@ namespace Database.UnitOfWork.EF.Services
         /// <inheritdoc/>
         public virtual void Add(TEntity item)
         {
-            if (item is null) 
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
             Context.Set<TEntity>().Add(item);

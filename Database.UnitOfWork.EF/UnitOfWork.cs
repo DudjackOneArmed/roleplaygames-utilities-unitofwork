@@ -1,7 +1,7 @@
-﻿using Database.UnitOfWork.Contracts.Services;
+﻿using Database.UnitOfWork.Contracts;
 using Microsoft.EntityFrameworkCore;
 
-namespace Database.UnitOfWork.EF.Services
+namespace Database.UnitOfWork.EF
 {
     /// <inheritdoc/>
     public class UnitOfWork : UnitOfWorkBase
