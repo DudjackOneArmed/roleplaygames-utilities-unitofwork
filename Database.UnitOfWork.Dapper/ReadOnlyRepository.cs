@@ -1,7 +1,7 @@
-﻿using Database.UnitOfWork.Contracts.Entities;
-using Database.UnitOfWork.Contracts.Services;
+﻿using Database.UnitOfWork.Contracts;
+using Database.UnitOfWork.Contracts.Entities;
 
-namespace Database.UnitOfWork.Dapper.Services
+namespace Database.UnitOfWork.Dapper
 {
     /// <inheritdoc/>
     public class ReadOnlyRepository<TEntity> : IReadOnlyRepository<TEntity> where TEntity : EntityBase

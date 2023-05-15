@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Database.UnitOfWork.Contracts.Services
+namespace Database.UnitOfWork.Contracts
 {
     /// <summary>
     /// Manages async executing query logic
@@ -21,7 +21,7 @@ namespace Database.UnitOfWork.Contracts.Services
         /// </summary>
         /// <typeparam name="T">Query elements type</typeparam>
         /// <param name="query">Query</param>
-        /// <param name="predicate">Predicate to select elemets</param>
+        /// <param name="predicate">Predicate to select elements</param>
         /// <param name="cancellationToken">Action cancellation token</param>
         /// <returns>First query element</returns>
         Task<T> FirstAsync<T>(IQueryable<T> query, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
@@ -40,7 +40,7 @@ namespace Database.UnitOfWork.Contracts.Services
         /// </summary>
         /// <typeparam name="T">Query elements type</typeparam>
         /// <param name="query">Query</param>
-        /// <param name="predicate">Predicate to select elemets</param>
+        /// <param name="predicate">Predicate to select elements</param>
         /// <param name="cancellationToken">Action cancellation token</param>
         /// <returns>First query element or default value</returns>
         Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> query, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
@@ -59,7 +59,7 @@ namespace Database.UnitOfWork.Contracts.Services
         /// </summary>
         /// <typeparam name="T">Query elements type</typeparam>
         /// <param name="query">Query</param>
-        /// <param name="predicate">Predicate to select elemets</param>
+        /// <param name="predicate">Predicate to select elements</param>
         /// <param name="cancellationToken">Action cancellation token</param>
         /// <returns>Last query element</returns>
         Task<T> LastAsync<T>(IQueryable<T> query, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
@@ -78,7 +78,7 @@ namespace Database.UnitOfWork.Contracts.Services
         /// </summary>
         /// <typeparam name="T">Query elements type</typeparam>
         /// <param name="query">Query</param>
-        /// <param name="predicate">Predicate to select elemets</param>
+        /// <param name="predicate">Predicate to select elements</param>
         /// <param name="cancellationToken">Action cancellation token</param>
         /// <returns>Last query element or default value</returns>
         Task<T?> LastOrDefaultAsync<T>(IQueryable<T> query, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
@@ -237,7 +237,7 @@ namespace Database.UnitOfWork.Contracts.Services
         /// </summary>
         /// <typeparam name="T">Query elements type</typeparam>
         /// <param name="query">Query</param>
-        /// <param name="predicate">Predicate to select elemets</param>
+        /// <param name="predicate">Predicate to select elements</param>
         /// <param name="cancellationToken">Action cancellation token</param>
         /// <returns>Single query element selector result</returns>
         Task<T> SingleAsync<T>(IQueryable<T> query, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
@@ -256,7 +256,7 @@ namespace Database.UnitOfWork.Contracts.Services
         /// </summary>
         /// <typeparam name="T">Query elements type</typeparam>
         /// <param name="query">Query</param>
-        /// <param name="predicate">Predicate to select elemets</param>
+        /// <param name="predicate">Predicate to select elements</param>
         /// <param name="cancellationToken">Action cancellation token</param>
         /// <returns>Single query element or default value</returns>
         Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> query, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);

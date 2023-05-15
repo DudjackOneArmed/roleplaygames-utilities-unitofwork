@@ -1,6 +1,5 @@
 ﻿using Autofac;
-using Database.UnitOfWork.Contracts.Services;
-using Database.UnitOfWork.EF.Services;
+using Database.UnitOfWork.Contracts;
 
 namespace Database.UnitOfWork.EF.DI.Autofac
 {
@@ -12,7 +11,7 @@ namespace Database.UnitOfWork.EF.DI.Autofac
         public static ContainerBuilder RegisterUnitOfWorkServices(this ContainerBuilder containerBuilder)
         {
             containerBuilder
-                .RegisterType<Services.UnitOfWork>()
+                .RegisterType<UnitOfWork>()
                 .As<IUnitOfWork>()
                 .InstancePerRequest();
 
@@ -25,7 +24,7 @@ namespace Database.UnitOfWork.EF.DI.Autofac
         /// Registers services for custom unit of work
         /// </summary>
         /// <typeparam name="TUnitOfWork">Custom unit of work type</typeparam>
-        public static ContainerBuilder RegisterUnitOfWorkServices<TUnitOfWork>(this ContainerBuilder containerBuilder) where TUnitOfWork : Services.UnitOfWork
+        public static ContainerBuilder RegisterUnitOfWorkServices<TUnitOfWork>(this ContainerBuilder containerBuilder) where TUnitOfWork : UnitOfWork
         {
             containerBuilder
                 .RegisterType<TUnitOfWork>()

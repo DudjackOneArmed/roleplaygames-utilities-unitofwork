@@ -1,6 +1,6 @@
 ﻿using Database.UnitOfWork.Contracts.Entities;
 
-namespace Database.UnitOfWork.Contracts.Services
+namespace Database.UnitOfWork.Contracts
 {
     /// <summary>
     /// Repository for reading data
@@ -9,7 +9,7 @@ namespace Database.UnitOfWork.Contracts.Services
     public interface IReadOnlyRepository<TEntity> : IRepository where TEntity : EntityBase
     {
         /// <summary>
-        /// Read all entities
+        /// Reads all entities
         /// </summary>
         /// <returns>Entities from database</returns>
         IQueryable<TEntity> Read();

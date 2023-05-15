@@ -1,8 +1,8 @@
-﻿using Database.UnitOfWork.Contracts.Services;
+﻿using Database.UnitOfWork.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Database.UnitOfWork.EF.Services
+namespace Database.UnitOfWork.EF
 {
     /// <inheritdoc/>
     public class QueryableAsyncExecutor : IQueryableAsyncExecutor
