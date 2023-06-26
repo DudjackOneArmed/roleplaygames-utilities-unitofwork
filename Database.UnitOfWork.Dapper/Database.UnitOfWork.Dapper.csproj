@@ -4,9 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PackageId>RolePlayGames.Utils.$(AssemblyName)</PackageId>
-    <Version>1.1.0</Version>
-    <RepositoryUrl>https://bitbucket.org/Ganoes/net-roleplaygames-utilities</RepositoryUrl>
+    <PackageId>RolePlayGames.UnitOfWork.Dapper</PackageId>
+    <Version>0.1.0-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
