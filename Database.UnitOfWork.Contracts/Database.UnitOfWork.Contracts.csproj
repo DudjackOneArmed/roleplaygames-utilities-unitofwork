@@ -4,8 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>RolePlayGames.UnitOfWork.Contracts</PackageId>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.2.0-alpha</Version>
   </PropertyGroup>
 
 </Project>
