@@ -66,13 +66,27 @@ namespace Database.UnitOfWork.Contracts.Test
                 Repository = repository;
             }
         }
+
+        private class UnitOfWorkWithCreateReadOnlyRepositoryImplementation : UnitOfWork
+        {
+            protected override IReadOnlyRepository<TEntity> CreateReadOnlyRepository<TEntity>()
+            {
+                return new Mock<IReadOnlyRepository<TEntity>>().Object;
+            }
+        }
+
+        private class UnitOfWorkWithCreateRepositoryImplementation : UnitOfWork
+        {
+            protected override IRepository<TEntity> CreateRepository<TEntity>()
+            {
+                return new Mock<IRepository<TEntity>>().Object;
+            }
+        }
         
         private readonly Mock<IReadOnlyRepository<EntityBase>> _readOnlyRepositoryMock;
         private readonly Mock<IRepository<EntityBase>> _repositoryMock;
         private readonly Mock<IRepository> _customRepositoryMock;
 
-        private readonly UnitOfWorkWithReadonlyRepository _unitOfWorkWithReadonlyRepository;
-        private readonly UnitOfWorkWithRepository _unitOfWorkWithRepository;
         private readonly UnitOfWorkWithRepositoryAndReadonlyRepository _unitOfWorkWithRepositoryAndReadonlyRepository;
         private readonly UnitOfWorkWithCustomRepository _unitOfWorkWithCustomRepository;
 
@@ -82,10 +96,8 @@ namespace Database.UnitOfWork.Contracts.Test
             _repositoryMock = new();
             _customRepositoryMock = new();
 
-            _unitOfWorkWithReadonlyRepository = new(_readOnlyRepositoryMock.Object);
-            _unitOfWorkWithRepository = new(_repositoryMock.Object);
             _unitOfWorkWithRepositoryAndReadonlyRepository = new(_readOnlyRepositoryMock.Object, _repositoryMock.Object);
-            _unitOfWorkWithCustomRepository = new UnitOfWorkWithCustomRepository(_customRepositoryMock.Object);
+            _unitOfWorkWithCustomRepository = new(_customRepositoryMock.Object);
         }
 
         [Fact]
@@ -116,6 +128,34 @@ namespace Database.UnitOfWork.Contracts.Test
 
             // Assert
             Assert.That(result).IsSame(_unitOfWorkWithCustomRepository.Repository);
+        }
+
+        [Fact]
+        public void GetReadOnlyRepository_UnitOfWorkDoesNotContainsRepositoryAndCalledSeveralTimes_ReturnsSameCreatedRepository()
+        {
+            // Arrange
+            var unitOfWork = new UnitOfWorkWithCreateReadOnlyRepositoryImplementation();
+            var repository = unitOfWork.GetReadOnlyRepository<EntityBase>();
+
+            // Act
+            var result = unitOfWork.GetReadOnlyRepository<EntityBase>();
+
+            // Assert
+            Assert.That(result).IsSame(repository);
+        }
+
+        [Fact]
+        public void GetRepository_UnitOfWorkDoesNotContainsRepositoryAndCalledSeveralTimes_ReturnsSameCreatedRepository()
+        {
+            // Arrange
+            var unitOfWork = new UnitOfWorkWithCreateRepositoryImplementation();
+            var repository = unitOfWork.GetRepository<EntityBase>();
+
+            // Act
+            var result = unitOfWork.GetRepository<EntityBase>();
+
+            // Assert
+            Assert.That(result).IsSame(repository);
         }
     }
 }

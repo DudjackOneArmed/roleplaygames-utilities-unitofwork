@@ -8,6 +8,10 @@ namespace Database.UnitOfWork
     /// <inheritdoc/>
     public abstract class UnitOfWorkBase : IUnitOfWork
     {
+        private Dictionary<Type, object>? _allRepositories;
+
+        private Dictionary<Type, object> AllRepositories => _allRepositories ??= GetAllRepositories();
+
         ~UnitOfWorkBase()
         {
             Dispose();
@@ -16,48 +20,38 @@ namespace Database.UnitOfWork
         /// <inheritdoc/>
         public virtual IReadOnlyRepository<TEntity> GetReadOnlyRepository<TEntity>() where TEntity : EntityBase
         {
-            var properties = GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(x => x.GetValue(this))
-                .OfType<IReadOnlyRepository<TEntity>>()
-                .ToList();
+            if (GetRepository(typeof(IReadOnlyRepository<TEntity>)) is IReadOnlyRepository<TEntity> repository)
+            {
+                return repository;
+            }
 
-            return properties.Any()
-                ? (properties.Count == 1
-                    ? properties.First()
-                    : throw new MoreThanOneRepositoriesFoundException(typeof(IReadOnlyRepository<TEntity>), GetType()))
-                : CreateReadOnlyRepository<TEntity>();
+            var newRepository = CreateReadOnlyRepository<TEntity>();
+
+            AllRepositories[typeof(IReadOnlyRepository<TEntity>)] = newRepository;
+
+            return newRepository;
         }
 
         /// <inheritdoc/>
         public virtual IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
         {
-            var properties = GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(x => x.GetValue(this))
-                .OfType<IRepository<TEntity>>()
-                .ToList();
+            if (GetRepository(typeof(IRepository<TEntity>)) is IRepository<TEntity> repository)
+            {
+                return repository;
+            }
 
-            return properties.Any()
-                ? (properties.Count == 1
-                    ? properties.First()
-                    : throw new MoreThanOneRepositoriesFoundException(typeof(IRepository<TEntity>), GetType()))
-                : CreateRepository<TEntity>();
+            var newRepository = CreateRepository<TEntity>();
+
+            AllRepositories[typeof(IRepository<TEntity>)] = newRepository;
+
+            return newRepository;
         }
 
         /// <inheritdoc/>
         public virtual TRepository GetCustomRepository<TRepository>() where TRepository : class, IRepository
         {
-            var properties = GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(x => x.GetValue(this))
-                .OfType<TRepository>()
-                .ToList();
-
-            return properties.Any()
-                ? (properties.Count == 1
-                    ? properties.First()
-                    : throw new MoreThanOneRepositoriesFoundException(typeof(TRepository), GetType()))
+            return GetRepository(typeof(TRepository)) is TRepository repository
+                ? repository
                 : throw new CustomRepositoryNotFoundException(typeof(TRepository), GetType());
         }
 
@@ -89,5 +83,28 @@ namespace Database.UnitOfWork
         /// <typeparam name="TEntity">Repository entity type</typeparam>
         /// <returns>Repository</returns>
         protected abstract IRepository<TEntity> CreateRepository<TEntity>() where TEntity : EntityBase;
+
+        private object? GetRepository(Type repositoryType) => AllRepositories.TryGetValue(repositoryType, out var repository) ? repository : null;
+        /*
+        private Dictionary<Type, IRepository> GetGenericRepositories()
+        {
+            return GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.PropertyType)
+                .Select(x => x.GetValue(this) is IRepository)
+                .OfType<IRepository>()
+                //.Where(x => x is IRepository)
+                .GroupBy(x => x.GetType())
+                .ToDictionary(x => x.Key, x => x.Last());
+        }
+        */
+        private Dictionary<Type, object> GetAllRepositories()
+        {
+            return GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.PropertyType.IsAssignableTo(typeof(IRepository)))
+                .GroupBy(x => x.PropertyType)
+                .ToDictionary(x => x.Key, x => x.Last().GetValue(this));
+        }
     }
 }

@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Nullable>enable</Nullable>
     <PackageId>RolePlayGames.UnitOfWork.Dapper</PackageId>
-    <Version>0.2.0-alpha</Version>
+    <Version>0.2.1-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
