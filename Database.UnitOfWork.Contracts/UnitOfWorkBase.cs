@@ -85,19 +85,7 @@ namespace Database.UnitOfWork
         protected abstract IRepository<TEntity> CreateRepository<TEntity>() where TEntity : EntityBase;
 
         private object? GetRepository(Type repositoryType) => AllRepositories.TryGetValue(repositoryType, out var repository) ? repository : null;
-        /*
-        private Dictionary<Type, IRepository> GetGenericRepositories()
-        {
-            return GetType()
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.PropertyType)
-                .Select(x => x.GetValue(this) is IRepository)
-                .OfType<IRepository>()
-                //.Where(x => x is IRepository)
-                .GroupBy(x => x.GetType())
-                .ToDictionary(x => x.Key, x => x.Last());
-        }
-        */
+
         private Dictionary<Type, object> GetAllRepositories()
         {
             return GetType()
