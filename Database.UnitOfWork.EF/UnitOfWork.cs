@@ -24,7 +24,7 @@ namespace Database.UnitOfWork.EF
                 {
                     case EntityState.Modified:
                     case EntityState.Deleted:
-                        entry.State = EntityState.Modified; // revert changes made to deleted entity.
+                        entry.State = EntityState.Modified; // revert changes made to deleted entity
                         entry.State = EntityState.Unchanged;
                         break;
                     case EntityState.Added:
@@ -43,7 +43,7 @@ namespace Database.UnitOfWork.EF
                 {
                     case EntityState.Modified:
                     case EntityState.Deleted:
-                        entry.State = EntityState.Modified; // revert changes made to deleted entity.
+                        entry.State = EntityState.Modified; // revert changes made to deleted entity
                         entry.State = EntityState.Unchanged;
                         break;
                     case EntityState.Added:
