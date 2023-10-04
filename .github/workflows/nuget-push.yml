@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      PROJECT_NAME: Database.UnitOfWork.Contracts
-      PROJECT_PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
+      PROJECT_PATH: Database.UnitOfWork.Contracts/Database.UnitOfWork.Contracts.csproj
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -24,15 +23,14 @@ jobs:
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
-      run: dotnet pack Database.UnitOfWork.Contracts/Database.UnitOfWork.Contracts.csproj --output . --configuration Release
+      run: dotnet pack $PROJECT_PATH --output . --configuration Release
     - name: Push package
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
   publish-entityframework:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env:
-      PROJECT_NAME: Database.UnitOfWork.EF
-      PROJECT_PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
+    env: 
+      PROJECT_PATH: Database.UnitOfWork.EF/Database.UnitOfWork.EF.csproj
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -42,15 +40,14 @@ jobs:
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
-      run: dotnet pack $PROJECT_PATH --output $RELEASES_DIR --configuration Release
+      run: dotnet pack $PROJECT_PATH --output . --configuration Release
     - name: Push package
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
   publish-entityframework-dependencyinjection:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      PROJECT_NAME: Database.UnitOfWork.EF.DI
-      PROJECT_PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
+      PROJECT_PATH: Database.UnitOfWork.EF.DI/Database.UnitOfWork.EF.DI.csproj
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -60,15 +57,14 @@ jobs:
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
-      run: dotnet pack $PROJECT_PATH --output $RELEASES_DIR --configuration Release
+      run: dotnet pack $PROJECT_PATH --output . --configuration Release
     - name: Push package
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
   publish-dapper:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      PROJECT_NAME: Database.UnitOfWork.Dapper
-      PROJECT_PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
+      PROJECT_PATH: Database.UnitOfWork.Dapper/Database.UnitOfWork.Dapper.csproj
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -78,15 +74,14 @@ jobs:
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
-      run: dotnet pack $PROJECT_PATH --output $RELEASES_DIR --configuration Release
+      run: dotnet pack $PROJECT_PATH --output . --configuration Release
     - name: Push package
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
   publish-dapper-dependencyinjection:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      PROJECT_NAME: Database.UnitOfWork.Dapper.DI
-      PROJECT_PATH: $PROJECT_NAME/$PROJECT_NAME.csproj
+      PROJECT_PATH: Database.UnitOfWork.Dapper.DI/Database.UnitOfWork.Dapper.DI.csproj
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -96,6 +91,6 @@ jobs:
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
-      run: dotnet pack $PROJECT_PATH --output $RELEASES_DIR --configuration Release
+      run: dotnet pack $PROJECT_PATH --output . --configuration Release
     - name: Push package
       run: dotnet nuget push "*.nupkg" --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate
