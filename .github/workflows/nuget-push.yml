@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      PROJECT_NAME: Database.UnitOfWork.Contracts
-      PROJECT_PATH: ${{PROJECT_NAME}}/${{PROJECT_NAME}}.csproj
+      PROJECT_PATH: Database.UnitOfWork.Contracts/Database.UnitOfWork.Contracts.csproj
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
