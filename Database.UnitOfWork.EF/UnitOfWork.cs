@@ -1,5 +1,6 @@
 ﻿using Database.UnitOfWork.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Database.UnitOfWork.EF
 {
@@ -20,17 +21,7 @@ namespace Database.UnitOfWork.EF
         {
             foreach (var entry in Context.ChangeTracker.Entries())
             {
-                switch (entry.State)
-                {
-                    case EntityState.Modified:
-                    case EntityState.Deleted:
-                        entry.State = EntityState.Modified; // revert changes made to deleted entity
-                        entry.State = EntityState.Unchanged;
-                        break;
-                    case EntityState.Added:
-                        entry.State = EntityState.Detached;
-                        break;
-                }
+                RejectEntry(entry);
             }
         }
 
@@ -39,67 +30,30 @@ namespace Database.UnitOfWork.EF
         {
             foreach (var entry in Context.ChangeTracker.Entries<TEntity>())
             {
-                switch (entry.State)
-                {
-                    case EntityState.Modified:
-                    case EntityState.Deleted:
-                        entry.State = EntityState.Modified; // revert changes made to deleted entity
-                        entry.State = EntityState.Unchanged;
-                        break;
-                    case EntityState.Added:
-                        entry.State = EntityState.Detached;
-                        break;
-                }
+                RejectEntry(entry);
             }
         }
 
         /// <inheritdoc/>
         public override void SaveChanges()
         {
-            using var transaction = Context.Database.BeginTransaction();
-
-            try
-            {
-                SaveChangesInternal();
-                transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                RejectAllChanges();
-                throw;
-            }
+            SaveChangesInternal();
         }
 
         /// <inheritdoc/>
-        public override async Task SaveChangesAsync()
-        {
-            await using var transaction = await Context.Database.BeginTransactionAsync();
-
-            try
-            {
-                await SaveChangesAsyncInternal();
-                await transaction.CommitAsync().ConfigureAwait(false);
-            }
-            catch
-            {
-                await transaction.RollbackAsync().ConfigureAwait(false);
-                RejectAllChanges();
-                throw;
-            }
-        }
+        public override Task SaveChangesAsync() => SaveChangesAsyncInternal();
 
         /// <inheritdoc/>
         public override void Dispose()
         {
-            if (!_isDisposed)
-            {
-                Context.Dispose();
+            if (_isDisposed)
+                return;
 
-                _isDisposed = true;
+            Context.Dispose();
 
-                GC.SuppressFinalize(this);
-            }
+            _isDisposed = true;
+
+            GC.SuppressFinalize(this);
         }
 
         /// <inheritdoc/>
@@ -117,5 +71,20 @@ namespace Database.UnitOfWork.EF
         /// Save changes async, override it to implement additional work with files etc
         /// </summary>
         protected virtual async Task SaveChangesAsyncInternal() => await Context.SaveChangesAsync().ConfigureAwait(false);
+
+        private static void RejectEntry(EntityEntry entry)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Modified:
+                case EntityState.Deleted:
+                    entry.State = EntityState.Modified; // revert changes made to deleted entity
+                    entry.State = EntityState.Unchanged;
+                    break;
+                case EntityState.Added:
+                    entry.State = EntityState.Detached;
+                    break;
+            }
+        }
     }
 }
