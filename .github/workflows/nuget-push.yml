@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 6.0.x
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
@@ -36,7 +36,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 6.0.x
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
@@ -53,7 +53,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 6.0.x
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
@@ -70,7 +70,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 6.0.x
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
@@ -87,7 +87,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 6.0.x
     - name: Build
       run: dotnet build $PROJECT_PATH --configuration Release
     - name: Create package
