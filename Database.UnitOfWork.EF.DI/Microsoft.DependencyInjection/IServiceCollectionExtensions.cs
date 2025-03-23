@@ -12,6 +12,8 @@ namespace Microsoft.DependencyInjection
         /// </summary>
         public static IServiceCollection AddUnitOfWork(this IServiceCollection serviceCollection)
         {
+            IQueryableAsyncExecutor.Executor = new QueryableAsyncExecutor();
+
             return serviceCollection
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddTransient<IQueryableAsyncExecutor, QueryableAsyncExecutor>();
