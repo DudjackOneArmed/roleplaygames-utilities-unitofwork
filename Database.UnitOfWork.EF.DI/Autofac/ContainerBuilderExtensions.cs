@@ -93,6 +93,8 @@ namespace Database.UnitOfWork.EF.DI.Autofac
         /// </summary>
         private static ContainerBuilder RegisterServices(this ContainerBuilder containerBuilder)
         {
+            IQueryableAsyncExecutor.Executor = new QueryableAsyncExecutor();
+
             containerBuilder
                 .RegisterType<QueryableAsyncExecutor>()
                 .As<IQueryableAsyncExecutor>();
