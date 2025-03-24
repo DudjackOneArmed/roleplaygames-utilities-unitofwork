@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
-namespace Database.UnitOfWork.Contracts.Extensions
+namespace Database.UnitOfWork.Contracts
 {
     public static class QueryableExtensions
     {

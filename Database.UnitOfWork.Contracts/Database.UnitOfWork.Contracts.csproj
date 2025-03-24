@@ -6,7 +6,7 @@
     <Nullable>annotations</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>RolePlayGames.UnitOfWork.Contracts</PackageId>
-    <Version>0.2.3-alpha</Version>
+    <Version>0.2.4-alpha</Version>
   </PropertyGroup>
 
 </Project>

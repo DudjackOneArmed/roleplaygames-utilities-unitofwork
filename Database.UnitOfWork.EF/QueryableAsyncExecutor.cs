@@ -1,11 +1,10 @@
-﻿using Database.UnitOfWork.Contracts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Database.UnitOfWork.EF
+namespace Queryable.Async.Executors.EF
 {
     /// <inheritdoc/>
-    public class QueryableAsyncExecutor : IQueryableAsyncExecutor
+    public class QueryableAsyncExecutor : Database.UnitOfWork.Contracts.IQueryableAsyncExecutor
     {
         /// <inheritdoc/>
         public Task<bool> AllAsync<T>(IQueryable<T> query, Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
