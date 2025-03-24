@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Database.UnitOfWork.Contracts;
+using Queryable.Async.Executors.EF;
 
 namespace Database.UnitOfWork.EF.DI.Autofac
 {

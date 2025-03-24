@@ -2,6 +2,7 @@
 using Database.UnitOfWork.Contracts.Entities;
 using Database.UnitOfWork.EF;
 using Microsoft.Extensions.DependencyInjection;
+using Queryable.Async.Executors.EF;
 
 namespace Microsoft.DependencyInjection
 {
