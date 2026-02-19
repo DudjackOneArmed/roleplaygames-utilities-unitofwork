@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	<TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>RolePlayGames.UnitOfWork.Contracts</PackageId>
-    <Version>0.2.4-alpha</Version>
+	<Version>0.10.0-alpha</Version>
   </PropertyGroup>
 
 </Project>
